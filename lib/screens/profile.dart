@@ -5,9 +5,13 @@ import 'package:dummy_pro/model/user.dart';
 import 'package:dummy_pro/resources/auth_methods.dart';
 import 'package:dummy_pro/screens/login.dart';
 import 'package:dummy_pro/utils/colors.dart';
+import 'package:dummy_pro/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'edit_profile.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -20,10 +24,9 @@ class _ProfilePageState extends State<ProfilePage> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-
-  Uint8List? _image;
+  String? name;
+  String? email;
+  String? _image;
 
   @override
   void initState() {
@@ -34,8 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
-      nameController = TextEditingController(text: loggedInUser.name);
-      emailController = TextEditingController(text: loggedInUser.email);
+      name = loggedInUser.name;
+      email = loggedInUser.email;
+      _image = loggedInUser.photoUrl;
+      setState(() {
+      });
     });
   }
 
@@ -43,51 +49,46 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () async{
-              await AuthMethods.editUserDetails(UserModel(uid: user?.uid, name: nameController.text, email: emailController.text));
-
-            },
-            splashRadius: 17,
-            icon: Icon(Icons.save_outlined),
-          )
-        ],
+        backgroundColor: Colors.lightBlueAccent,
       ),
-        body: Stack(children: <Widget>[
+        body: SafeArea(
+          child: Stack(children: <Widget>[
       Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [Colors.lightBlueAccent, Colors.white24])),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [Colors.lightBlueAccent, Colors.white24])),
       ),
       Column(
-        children: [
-          TextField(
-            controller: nameController,
-            cursorColor: white,
-            style: TextStyle(color: Colors.lightBlueAccent),
-            decoration: InputDecoration(hintText: "name"),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-            controller: emailController,
-            cursorColor: white,
-            style: TextStyle(color: Colors.lightBlueAccent),
-            decoration: InputDecoration(hintText: "email"),
-          ),
-          CircleAvatar(
-            child: IconButton(
-              onPressed: (){logOut(context);},
-              icon: Icon(Icons.logout),
+          children: [
+            SizedBox(height: 80,),
+            Center(
+              child: CircleAvatar(
+                radius: 64,
+                backgroundImage: _image != null ? NetworkImage(_image!) : NetworkImage("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")
+              ),
             ),
-          )
-        ],
+            SizedBox(height: 15,),
+            Text(name ?? "Name", style: TextStyle(color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),),
+            SizedBox(height: 10,),
+            Text(email ?? "Email",style: TextStyle(color: Colors.black, fontSize: 20),),
+            SizedBox(height: 15,),
+            Row(
+              children: [
+                SizedBox(width: 140),
+                Text("Edit Details", style: TextStyle(color: Colors.black, fontSize: 20),),
+                IconButton(
+                  splashRadius: 20,
+                    onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+                    }, icon: Icon(Icons.arrow_forward_rounded, color: Colors.blue,)),
+              ],
+            ),
+          ],
       )
-    ]));
+    ]),
+        ));
   }
 
   Future<void> logOut(BuildContext context) async {

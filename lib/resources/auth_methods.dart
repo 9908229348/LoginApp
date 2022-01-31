@@ -9,9 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthMethods {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<String> signUpUser(
       {required String email,
@@ -57,15 +56,31 @@ class AuthMethods {
     await _auth.signOut();
   }
 
-  static Future<String> editUserDetails(UserModel userModel) async{
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    DocumentReference reference = FirebaseFirestore.instance.collection("users").doc(userModel.uid);
-    reference.update({'name': userModel.name, 'email': userModel.email});
-    if(reference != null){
-      print("xxxxxxxxxxxxxxxxxxxx");
-      return "success";
+  static Future<String> editUserDetails(String uid, String name, String email, Uint8List? file) async{
+
+    var userId = _auth.currentUser?.uid;
+    print("++++++Uid++++++++ $uid");
+    if(file != null){
+      String photoUrl =
+      await StorageMethods().uploadImageToStorage("profilePic", file);
+      await _firestore.collection("users").doc(userId).update({
+        "name": name,
+        "email": email,
+        "photoUrl": photoUrl
+      });
+    }else{
+      print("---------------------------");
+      print("Inside Else $name $email");
+      try {
+        await _firestore.collection("users").doc(userId).update({
+          "name": name,
+          "email": email,
+        });
+      }catch(e){
+        print(e.toString());
+      }
     }
-    return "something wrong";
+    return "success";
   }
 
   void signInWithGoogle(BuildContext context) async {

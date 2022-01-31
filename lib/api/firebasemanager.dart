@@ -4,20 +4,57 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FireBaseManager {
   static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  static QueryDocumentSnapshot? lastDoc;
 
-  static Future<List<Note>> fetchNotes() async {
+
+  static Future<List<Note>> fetchNotes(String queryType) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uid = _auth.currentUser?.uid;
-    CollectionReference ref =
-        _fireStore.collection("users").doc(uid).collection("notes");
+
+    Query<Map<String, dynamic>> ref;
+
+    switch(queryType){
+       case "fetchNotes":
+         ref = _fireStore.collection("users").doc(uid).collection("notes").orderBy("title").limit(10);
+         break;
+      default:
+        if(lastDoc != null) {
+        ref = _fireStore.collection("users").doc(uid).collection("notes")
+            .orderBy("title").startAfterDocument(lastDoc!)
+            .limit(10);
+      }
+        ref = _fireStore.collection("users").doc(uid).collection("notes").orderBy("title").limit(10);
+    }
+
     QuerySnapshot snapShot = await ref.get();
     final allData = snapShot.docs
         .map((doc) => Note.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
+    lastDoc = snapShot.docs.last;
+    print(lastDoc);
     print(allData);
-    print("++++++=========+================");
+    print("++++++=========+================ inside fetchnote");
     return allData;
   }
+
+  // static Future<List<Note>> fetchMoreNotes() async {
+  //   final FirebaseAuth _auth = FirebaseAuth.instance;
+  //   var uid = _auth.currentUser?.uid;
+  //   List<Note> allData = [];
+  //
+  //   if(lastDoc != null){
+  //     Query<Map<String, dynamic>> ref =
+  //     _fireStore.collection("users").doc(uid).collection("notes").orderBy("title").startAfterDocument(lastDoc!).limit(10);
+  //     QuerySnapshot snapShot = await ref.get();
+  //     allData = snapShot.docs
+  //         .map((doc) => Note.fromJson(doc.data() as Map<String, dynamic>))
+  //         .toList();
+  //     lastDoc = snapShot.docs.last;
+  //     print(allData);
+  //     print("++++++=========+================");
+  //   }
+  //   return allData;
+  // }
 
   static Future<String> addNote(Note note) async {
 
@@ -29,6 +66,7 @@ class FireBaseManager {
         .collection("notes")
         .doc();
     note.id = documentReference.id;
+    print("----------------------Inside add Note-----------${note.toJson()}");
     documentReference.set(note.toJson());
     if (documentReference != null) {
       print("successsssssssssssssssssssssss $documentReference");

@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dummy_pro/api/firebasemanager.dart';
 import 'package:dummy_pro/model/note.dart';
-import 'package:dummy_pro/screens/addnote.dart';
 import 'package:dummy_pro/utils/colors.dart';
 import 'package:dummy_pro/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +47,7 @@ class _NoteViewState extends State<NoteView> {
               icon: Icon(Icons.delete_outline)),
           IconButton(
               onPressed: () async{
-                await FireBaseManager.editNote(Note(id: widget.docToEdit.id, title: titleController.text, description: descriptionController.text));
+                await FireBaseManager.editNote(Note(id: widget.docToEdit.id, title: titleController.text, description: descriptionController.text, createdTime: DateTime.now()));
                 Navigator.pop(context);
               },
               splashRadius: 17,

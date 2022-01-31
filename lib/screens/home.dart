@@ -5,6 +5,7 @@ import 'package:dummy_pro/screens/note_page.dart';
 import 'package:dummy_pro/screens/profile.dart';
 import 'package:dummy_pro/screens/side_menubar.dart';
 import 'package:dummy_pro/utils/colors.dart';
+import 'package:dummy_pro/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -32,11 +33,31 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Note> filteredNoteList = [];
 
   bool isSearchMode = false;
+  int noteLimit = 10;
+  //bool hasNext = true;
+  bool _isFetchingNotes = false;
+  bool allLoaded = false;
+
+
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    fetchNotes();
+     fetchNotes(Constants.FETCH_NOTES);
+    _scrollController.addListener(() {
+      if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent && !_isFetchingNotes){
+        fetchNotes(Constants.FETCH_MORE_NOTES);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
   }
 
   // @override
@@ -89,13 +110,50 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  fetchNotes() {
-    FireBaseManager.fetchNotes().then((value) {
-      noteList = value;
-      //foundNotes = noteList;
-      setState(() {});
+  fetchNotes(String queryType) async{
+    if(allLoaded){
+      return;
+    }
+    setState(() {
+      _isFetchingNotes = true;
+    });
+    List<Note> newNotes = await FireBaseManager.fetchNotes(queryType);
+    print("-----------------------------------------------------------------------Inside fetch----------------");
+
+    print(newNotes.toString());
+    if(newNotes.length < noteLimit){
+      allLoaded = true;
+    }
+    if(newNotes.isNotEmpty){
+      noteList.addAll(newNotes);
+    }
+    setState(() {
+      _isFetchingNotes = false;
+      //allLoaded = newNotes.isEmpty;
     });
   }
+
+  // fetchMoreNotes() async{
+  //   if(allLoaded){
+  //     return;
+  //   }
+  //   setState(() {
+  //     _isFetchingNotes = true;
+  //   });
+  //   List<Note> newNotes = await FireBaseManager.fetchMoreNotes();
+  //
+  //   print(newNotes.toString());
+  //   if(newNotes.length < noteLimit){
+  //     allLoaded = true;
+  //   }
+  //   if(newNotes.isNotEmpty){
+  //     noteList.addAll(newNotes);
+  //   }
+  //   setState(() {
+  //     _isFetchingNotes = false;
+  //     //allLoaded = newNotes.isEmpty;
+  //   });
+  // }
 
   
   // CollectionReference ref =
@@ -103,16 +161,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("nnnnnnnnnnnnnnnnnnnnnnnnnnn");
-    print("filteredNote list ${filteredNoteList.length}");
-    print(noteList.length);
-    print(isSearchMode);
-    print(filteredNoteList.isNotEmpty);
-    print(filteredNoteList.isEmpty);
-    print("condition");
-    print(!isSearchMode && filteredNoteList.isEmpty);
+    // print("nnnnnnnnnnnnnnnnnnnnnnnnnnn");
+    // print("filteredNote list ${filteredNoteList.length}");
+    // print(noteList.length);
+    // print(isSearchMode);
+    // print(filteredNoteList.isNotEmpty);
+    // print(filteredNoteList.isEmpty);
+    // print("condition");
+    // print(!isSearchMode && filteredNoteList.isEmpty);
 
-    fetchNotes();
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -169,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Container(
                             height: 55,
-                            width: 170,
+                            width: 150,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: white,
                           )),
                       IconButton(
-                        icon: Icon(Icons.logout_sharp,
+                        icon: Icon(Icons.perm_contact_cal_rounded,
                             color: white.withOpacity(0.7)),
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage())) ;
@@ -244,6 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: MediaQuery.of(context).size.height,
         child: (!isSearchMode && filteredNoteList.isEmpty) ?
             StaggeredGridView.countBuilder(
+                controller: _scrollController,
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount:

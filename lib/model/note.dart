@@ -6,12 +6,12 @@ final String tableNotes = "notes";
 class NoteFields{
 
   static final List<String> values = [
-    id, title, description
+    id, title, description, time
   ];
   static final String id = "_id";
   static final String title = "title";
   static final String description = "description";
-  //static final String time = "time";
+  static final String time = "time";
 }
 
 class Note{
@@ -19,9 +19,9 @@ class Note{
   late String? id;
   late final String title;
   late final String description;
-  //late final DateTime? createdTime;
+  DateTime? createdTime;
 
-  Note({this.id,required this.title, required this.description, /*this.createdTime*/});
+  Note({this.id,required this.title, required this.description, this.createdTime});
 
   // Note fromSnap(DocumentSnapshot snap){
   //   var snapshot = snap.data() as Map<String, dynamic>;
@@ -38,13 +38,15 @@ class Note{
     id: json[NoteFields.id] as String?,
     title: json[NoteFields.title] as String,
     description: json[NoteFields.description] as String,
+    createdTime: DateTime.parse(json[NoteFields.time] as String)
+
   );
   Map<String, dynamic> toJson(){
     return{
       NoteFields.id: id,
       NoteFields.title: title,
       NoteFields.description: description,
-      //NoteFields.time: createdTime?.toIso8601String()
+      NoteFields.time: createdTime!.toIso8601String()
     };
   }
 
@@ -52,12 +54,12 @@ class Note{
     String? id,
     String? title,
     String? description,
-    //DateTime? createdTime
+    DateTime? createdTime
   }) =>
   Note(
     id: id ?? this.id,
     title: title ?? this.title,
     description: description ?? this.description,
-    //createdTime: createdTime ?? this.createdTime,
+    createdTime: createdTime ?? this.createdTime,
   );
 }

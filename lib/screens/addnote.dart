@@ -27,7 +27,7 @@ class _AddNoteState extends State<AddNote> {
         elevation: 0.0,
         actions: [
           IconButton(onPressed: () async{
-            Note note = Note(title: titleEditingController.text, description: descriptionEditingController.text);
+            Note note = Note(title: titleEditingController.text, description: descriptionEditingController.text, createdTime: DateTime.now());
             String result = await FireBaseManager.addNote(note);
             if(result == "success"){
               showSnackBar(context, "Note is added successfully");
