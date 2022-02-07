@@ -1,11 +1,13 @@
+import 'package:dummy_pro/model/note.dart';
 import 'package:dummy_pro/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class TextButtonWidget extends StatelessWidget {
   final IconData icon;
   final String text;
+  Function callBack;
   
-  const TextButtonWidget({ Key? key, required this.icon, required this.text }) : super(key: key);
+  TextButtonWidget({ Key? key, required this.icon, required this.text, required this.callBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,9 @@ class TextButtonWidget extends StatelessWidget {
                     topRight: Radius.circular(50),
                     bottomRight: Radius.circular(50)),
               ))),
-          onPressed: (){},
+          onPressed: () {
+            callBack();
+          },
           child: Container(
             padding: EdgeInsets.all(5),
             child: Row(

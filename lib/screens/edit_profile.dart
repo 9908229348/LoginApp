@@ -61,7 +61,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           actions: [
             IconButton(
               onPressed: () async{
-                print("+++++++++++++++++++++++++++++++++ $_image");
                 String message = await AuthMethods.editUserDetails(user!.uid, nameController.text, emailController.text, _image);
                 if(message == "success"){
                   Navigator.pop(context);
@@ -91,10 +90,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 SizedBox(height: 20,),
                 Center(
                   child: Stack(children: [
-                    //     CircleAvatar(
-                    //   radius: 64,
-                    //   backgroundImage: NetworkImage(_imageFromFirebase!),
-                    // ),
                     _image != null
                         ? CircleAvatar(
                       radius: 64,
@@ -135,12 +130,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   style: TextStyle(fontSize: 25, color: Colors.blue),
                   decoration: InputDecoration(hintText: "email"),
                 ),
-                // CircleAvatar(
-                //   child: IconButton(
-                //     onPressed: (){logOut(context);},
-                //     icon: Icon(Icons.logout),
-                //   ),
-                // )
               ],
             ),
           )

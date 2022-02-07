@@ -1,44 +1,36 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 final String tableNotes = "notes";
 
 class NoteFields{
 
   static final List<String> values = [
-    id, title, description, time
+    id, title, description, time, isArchieve, isRemainded
   ];
   static final String id = "_id";
   static final String title = "title";
   static final String description = "description";
+  static final String isArchieve = "isArchieve";
   static final String time = "time";
+  static final String isRemainded = "isRemainded";
 }
 
 class Note{
-  
-  late String? id;
-  late final String title;
-  late final String description;
+
+  String? id;
+  final String title;
+  final String description;
+  bool isArchieve;
+  bool isRemainded;
   DateTime? createdTime;
 
-  Note({this.id,required this.title, required this.description, this.createdTime});
+  Note({this.id,required this.title, required this.description, this.isArchieve = false, this.isRemainded = false,  this.createdTime});
 
-  // Note fromSnap(DocumentSnapshot snap){
-  //   var snapshot = snap.data() as Map<String, dynamic>;
-
-  //   return Note(
-  //     id: snapshot["id"],
-  //     title: snapshot["title"],
-  //     description: snapshot["description"]
-  //   );
-  // }
-
-
-  static Note fromJson(Map<String, Object?> json) => Note(
-    id: json[NoteFields.id] as String?,
-    title: json[NoteFields.title] as String,
-    description: json[NoteFields.description] as String,
-    createdTime: DateTime.parse(json[NoteFields.time] as String)
+  static Note fromJson(Map<String, dynamic> json) => Note(
+      id: json[NoteFields.id] as String,
+      title: json[NoteFields.title] as String,
+      description: json[NoteFields.description] as String,
+      isArchieve : json[NoteFields.isArchieve] ?? false,
+      isRemainded: json[NoteFields.isRemainded] ?? false,
+      createdTime: json[NoteFields.time].toDate()
 
   );
   Map<String, dynamic> toJson(){
@@ -46,7 +38,9 @@ class Note{
       NoteFields.id: id,
       NoteFields.title: title,
       NoteFields.description: description,
-      NoteFields.time: createdTime!.toIso8601String()
+      NoteFields.isArchieve : isArchieve,
+      NoteFields.isRemainded : isRemainded,
+      NoteFields.time: createdTime
     };
   }
 
@@ -54,12 +48,16 @@ class Note{
     String? id,
     String? title,
     String? description,
+    bool? isArchieve,
+    bool? isRemainded,
     DateTime? createdTime
   }) =>
-  Note(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    description: description ?? this.description,
-    createdTime: createdTime ?? this.createdTime,
-  );
+      Note(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        isArchieve:isArchieve ?? this.isArchieve,
+        isRemainded: isRemainded ?? this.isRemainded,
+        createdTime: createdTime ?? this.createdTime,
+      );
 }

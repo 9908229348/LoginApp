@@ -23,12 +23,15 @@ class DatabaseManager {
   Future _createDB(Database db, int version) async {
     final idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
     final textType = "TEXT NOT NULL";
+    final boolType = ' BOOLEAN NOT NULL';
 
     await db.execute('''
       CREATE TABLE $tableNotes(
         ${NoteFields.id} $idType,
         ${NoteFields.title} $textType,
-        ${NoteFields.description} $textType            // DateTime 
+        ${NoteFields.description} $textType,
+        ${NoteFields.isArchieve} $boolType,
+        ${NoteFields.time} $textType            // DateTime 
       )
     ''');
   }
@@ -76,6 +79,12 @@ class DatabaseManager {
     );
   }
 
+//   Future archNote(Note? note) async{
+//   final db = await instance.database;
+
+//  await db.update(tableNotes, {note!.isArchieve : !note.isArchieve ? 1 : 0}, where:  '${NoteFields.id} = ?' ,whereArgs: [note.id] );
+// }
+
   Future<int> delete(int id) async {
     final db = await instance.database;
     return await db
@@ -86,4 +95,5 @@ class DatabaseManager {
     final db = await instance.database;
     db.close();
   }
+
 }

@@ -25,7 +25,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkIfUserIsAlreadyLoggedIn();
   }
@@ -112,7 +111,6 @@ class _LoginState extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      //emailField,
                       TextFieldInput(
                           textEditingController: emailController,
                           hintText: "Enter Email",
@@ -161,7 +159,6 @@ class _LoginState extends State<Login> {
                             width: 250,
                           ),
                           onTap: () {
-                            //AuthMethods().signInWithGoogle(context);
                           }),
                       GestureDetector(
                           child: Image.asset(

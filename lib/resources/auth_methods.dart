@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dummy_pro/model/user.dart';
 import 'package:dummy_pro/resources/storage.dart';
 import 'package:dummy_pro/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,19 +55,18 @@ class AuthMethods {
     await _auth.signOut();
   }
 
-  static Future<String> editUserDetails(String uid, String name, String email, Uint8List? file) async{
-
+  static Future<String> editUserDetails(
+      String uid, String name, String email, Uint8List? file) async {
     var userId = _auth.currentUser?.uid;
     print("++++++Uid++++++++ $uid");
-    if(file != null){
+    if (file != null) {
       String photoUrl =
-      await StorageMethods().uploadImageToStorage("profilePic", file);
-      await _firestore.collection("users").doc(userId).update({
-        "name": name,
-        "email": email,
-        "photoUrl": photoUrl
-      });
-    }else{
+          await StorageMethods().uploadImageToStorage("profilePic", file);
+      await _firestore
+          .collection("users")
+          .doc(userId)
+          .update({"name": name, "email": email, "photoUrl": photoUrl});
+    } else {
       print("---------------------------");
       print("Inside Else $name $email");
       try {
@@ -76,7 +74,7 @@ class AuthMethods {
           "name": name,
           "email": email,
         });
-      }catch(e){
+      } catch (e) {
         print(e.toString());
       }
     }
@@ -114,7 +112,6 @@ class AuthMethods {
 
         users.doc(user?.uid).get().then((doc) {
           if (doc.exists) {
-           
             doc.reference.update(userData);
 
             Navigator.of(context).pushReplacement(
@@ -123,8 +120,6 @@ class AuthMethods {
               ),
             );
           } else {
-       
-
             users.doc(user?.uid).set(userData);
 
             Navigator.of(context).pushReplacement(

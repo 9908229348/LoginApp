@@ -1,14 +1,10 @@
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dummy_pro/model/user.dart';
 import 'package:dummy_pro/resources/auth_methods.dart';
 import 'package:dummy_pro/screens/login.dart';
-import 'package:dummy_pro/utils/colors.dart';
-import 'package:dummy_pro/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'edit_profile.dart';

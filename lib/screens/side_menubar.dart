@@ -1,3 +1,6 @@
+import 'package:dummy_pro/screens/archievenotes.dart';
+import 'package:dummy_pro/screens/home.dart';
+import 'package:dummy_pro/screens/remaindernotes.dart';
 import 'package:dummy_pro/utils/colors.dart';
 import 'package:dummy_pro/widgets/text_button.dart';
 import 'package:flutter/material.dart';
@@ -28,52 +31,39 @@ class _SideMenuState extends State<SideMenu> {
             Divider(
               color: white.withOpacity(0.3),
             ),
-            TextButtonWidget(icon: Icons.lightbulb, text: "Notes"),
+            TextButtonWidget(
+              icon: Icons.lightbulb,
+              text: "Notes",
+              callBack: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
+              },
+            ),
             SizedBox(
               height: 5,
             ),
-            TextButtonWidget(icon: Icons.archive_outlined, text: "Archieve"),
+            TextButtonWidget(
+                icon: Icons.archive_outlined,
+                text: "Archieve",
+                callBack: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ArchieveNotes()));
+                }),
             SizedBox(
               height: 5,
             ),
-            //TextButtonWidget(icon: Icons.settings_outlined, text: "Settings"),
-            settings()
+            TextButtonWidget(
+                icon: Icons.alarm,
+                text: "Remainders",
+                callBack: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RemainderNotes()));
+                })
           ]),
         ),
       ),
     );
-  }
-
-  Widget settings(){
-    return Container(
-      margin: EdgeInsets.only(right: 40),
-      child: TextButton(
-          style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(50),
-                    bottomRight: Radius.circular(50)),
-              ))),
-          onPressed: (){},
-          child: Container(
-            padding: EdgeInsets.all(5),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.settings_outlined,
-                  size: 25,
-                  color: white.withOpacity(0.7),
-                ),
-                SizedBox(
-                  width: 27,
-                ),
-                Text(
-                  "Settings",
-                  style: TextStyle(color: white.withOpacity(0.7), fontSize: 18),
-                )
-              ],
-            )),
-    ));
   }
 }
