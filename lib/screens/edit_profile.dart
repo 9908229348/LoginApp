@@ -40,9 +40,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       nameController = TextEditingController(text: loggedInUser.name);
       emailController = TextEditingController(text: loggedInUser.email);
       _imageFromFirebase = loggedInUser.photoUrl;
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -60,12 +58,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
           backgroundColor: Colors.lightBlueAccent,
           actions: [
             IconButton(
-              onPressed: () async{
-                String message = await AuthMethods.editUserDetails(user!.uid, nameController.text, emailController.text, _image);
-                if(message == "success"){
+              onPressed: () async {
+                String message = await AuthMethods.editUserDetails(user!.uid,
+                    nameController.text, emailController.text, _image);
+                if (message == "success") {
                   Navigator.pop(context);
                   showSnackBar(context, "Saved Successfully");
-                }else{
+                } else {
                   showSnackBar(context, "Something went wrong");
                 }
               },
@@ -87,19 +86,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Center(
                   child: Stack(children: [
                     _image != null
                         ? CircleAvatar(
-                      radius: 64,
-                      backgroundImage: MemoryImage(_image!),
-                    )
+                            radius: 64,
+                            backgroundImage: MemoryImage(_image!),
+                          )
                         : CircleAvatar(
-                      radius: 64,
-                      backgroundImage: _imageFromFirebase != null ? NetworkImage(_imageFromFirebase!
-                          ) : NetworkImage("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"),
-                    ),
+                            radius: 64,
+                            backgroundImage: _imageFromFirebase != null
+                                ? NetworkImage(_imageFromFirebase!)
+                                : NetworkImage(
+                                    "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"),
+                          ),
                     Positioned(
                         bottom: -10,
                         left: 80,
@@ -112,8 +115,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ))
                   ]),
                 ),
-                SizedBox(height: 20,),
-                Text("name", style: TextStyle(fontSize: 20),),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "name",
+                  style: TextStyle(fontSize: 20),
+                ),
                 TextField(
                   controller: nameController,
                   cursorColor: white,
@@ -123,7 +131,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Text("email", style: TextStyle(fontSize: 20),),
+                Text(
+                  "email",
+                  style: TextStyle(fontSize: 20),
+                ),
                 TextField(
                   controller: emailController,
                   cursorColor: white,
@@ -134,13 +145,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           )
         ]));
-  }
-
-  Future<void> logOut(BuildContext context) async {
-    await AuthMethods().signOut();
-    SharedPreferences sharedPreference = await SharedPreferences.getInstance();
-    sharedPreference.setBool("isLoggedIn", false);
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
   }
 }

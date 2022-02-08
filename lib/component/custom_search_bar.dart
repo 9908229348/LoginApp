@@ -2,7 +2,9 @@ import 'package:dummy_pro/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
+
   Function searchInputCallBack;
+  
   CustomSearchBar({Key? key, required this.searchInputCallBack})
       : super(key: key);
 
@@ -18,32 +20,22 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 55,
-      width: 150,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-            controller: textEditingController,
-            onChanged: (value) {
-              searchInputCallBack(value);
-            },
-            style: TextStyle(color: white),
-            cursorColor: white,
-            decoration: InputDecoration(
-                hintStyle: TextStyle(color: white.withOpacity(0.3)),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: white.withOpacity(0.3),
-                ),
-                hintText: "Search Note",
-                border: InputBorder.none),
-            keyboardType: TextInputType.text,
+    return TextFormField(
+      controller: textEditingController,
+      onChanged: (value) {
+        searchInputCallBack(value);
+      },
+      style: TextStyle(color: white),
+      cursorColor: white,
+      decoration: InputDecoration(
+          hintStyle: TextStyle(color: white.withOpacity(0.3)),
+          prefixIcon: Icon(
+            Icons.search,
+            color: white.withOpacity(0.3),
           ),
-        ],
-      ),
+          hintText: "Search Notes",
+          border: InputBorder.none),
+      keyboardType: TextInputType.text,
     );
   }
 }

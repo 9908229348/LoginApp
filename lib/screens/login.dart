@@ -1,11 +1,14 @@
+import 'package:dummy_pro/api/firebasemanager.dart';
 import 'package:dummy_pro/resources/auth_methods.dart';
 import 'package:dummy_pro/screens/home.dart';
 import 'package:dummy_pro/utils/utils.dart';
 import 'package:dummy_pro/utils/validators.dart';
 import 'package:dummy_pro/widgets/text_field_input.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'forget_password.dart';
 import 'registration.dart';
 
 class Login extends StatefulWidget {
@@ -84,7 +87,9 @@ class _LoginState extends State<Login> {
     );
 
     final forgetPassword = FlatButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassWord()));
+      },
       child: const Text(
         'Forgot Password',
         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -158,7 +163,12 @@ class _LoginState extends State<Login> {
                             "assets/images/google-signin.png",
                             width: 250,
                           ),
-                          onTap: () {
+                          onTap: () async{
+                            try{
+                            await FireBaseManager.signInWithGoogle();
+                            } on FirebaseAuthException catch(e){
+                              print(e.message);
+                            }
                           }),
                       GestureDetector(
                           child: Image.asset(

@@ -124,158 +124,126 @@ class BaseHomeViewState extends State<BaseHomeView> {
   Widget build(BuildContext context) {
     print(filteredNoteList.length);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        splashColor: bgColor,
-        elevation: 1.0,
-        foregroundColor: Colors.white,
-        child: Icon(
-          Icons.add,
-          size: 40.0,
+        floatingActionButton: FloatingActionButton(
+          splashColor: bgColor,
+          elevation: 1.0,
+          foregroundColor: Colors.white,
+          child: Icon(
+            Icons.add,
+            size: 40.0,
+          ),
+          backgroundColor: cardColor,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AddNote()));
+          },
         ),
-        backgroundColor: cardColor,
+        endDrawerEnableOpenDragGesture: true,
+        key: _drawerKey,
+        drawer: SideMenu(),
+        backgroundColor: bgColor,
+        appBar: appBar(context),
+        body: NotesGridView());
+  }
+
+  PreferredSizeWidget appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: cardColor,
+      title: CustomSearchBar(searchInputCallBack: (value) {
+        searchNotes(value);
+      }),
+      leading: IconButton(
+        icon: Icon(Icons.menu),
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddNote()));
+          _drawerKey.currentState!.openDrawer();
         },
       ),
-      endDrawerEnableOpenDragGesture: true,
-      key: _drawerKey,
-      drawer: SideMenu(),
-      backgroundColor: bgColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  height: 55,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: cardColor,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                            color: black.withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 3)
-                      ]),
-                  child: Row(
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              _drawerKey.currentState!.openDrawer();
-                            },
-                            icon: Icon(Icons.menu),
-                            color: white,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          CustomSearchBar(searchInputCallBack: (value) {
-                            searchNotes(value);
-                          })
-                        ],
-                      ),
-                      TextButton(
-                          style: ButtonStyle(
-                              overlayColor: MaterialStateColor.resolveWith(
-                                  (states) => white.withOpacity(0.1)),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              ))),
-                          onPressed: () {
-                            isGridView = !isGridView;
-                            setState(() {});
-                          },
-                          child: Icon(
-                            isGridView == true
-                                ? Icons.list_outlined
-                                : Icons.grid_view,
-                            color: white,
-                          )),
-                      IconButton(
-                        icon: Icon(Icons.perm_contact_cal_rounded,
-                            color: white.withOpacity(0.7)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfilePage()));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                NotesGridView()
-              ],
-            ),
-          ),
+      actions: [
+        IconButton(
+            splashRadius: 18,
+            onPressed: () {
+              isGridView = !isGridView;
+              setState(() {});
+            },
+            icon: Icon(
+              isGridView == true ? Icons.list_outlined : Icons.grid_view,
+              color: white,
+            )),
+        IconButton(
+          splashRadius: 18,
+          icon: Icon(Icons.perm_contact_cal_rounded,
+              color: white.withOpacity(0.7)),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          },
         ),
-      ),
+      ],
     );
   }
 
   Widget NotesGridView() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        child: (!isSearchMode && filteredNoteList.isEmpty)
-            ? StaggeredGridView.countBuilder(
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount:
-                    isSearchMode ? filteredNoteList.length : noteList.length,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                crossAxisCount: 4,
-                staggeredTileBuilder: (index) =>
-                    StaggeredTile.fit(isGridView == true ? 2 : 4),
-                itemBuilder: (context, index) {
-                  Note note =
-                      isSearchMode ? filteredNoteList[index] : noteList[index];
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NoteView(docToEdit: note)));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: white.withOpacity(0.2)),
-                          borderRadius: BorderRadius.circular(7)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            note.title,
-                            style: TextStyle(
-                                color: white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            child: (!isSearchMode && filteredNoteList.isEmpty)
+                ? StaggeredGridView.countBuilder(
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemCount: isSearchMode
+                        ? filteredNoteList.length
+                        : noteList.length,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    crossAxisCount: 4,
+                    staggeredTileBuilder: (index) =>
+                        StaggeredTile.fit(isGridView == true ? 2 : 4),
+                    itemBuilder: (context, index) {
+                      Note note = isSearchMode
+                          ? filteredNoteList[index]
+                          : noteList[index];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NoteView(docToEdit: note)));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: white.withOpacity(0.2)),
+                              borderRadius: BorderRadius.circular(7)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                note.title,
+                                style: TextStyle(
+                                    color: white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                note.description,
+                                style: TextStyle(color: white),
+                              )
+                            ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            note.description,
-                            style: TextStyle(color: white),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                })
-            : Text(
-                "No Results",
-                style: TextStyle(color: white),
-              ));
+                        ),
+                      );
+                    })
+                : Text(
+                    "No Results",
+                    style: TextStyle(color: white),
+                  )),
+      ),
+    );
   }
 }

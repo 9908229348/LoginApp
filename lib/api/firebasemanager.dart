@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dummy_pro/model/note.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FireBaseManager {
   static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -151,7 +152,6 @@ class FireBaseManager {
     return allData;
   }
 
-
   static Future<String> addNote(Note note) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uid = _auth.currentUser?.uid;
@@ -218,5 +218,22 @@ class FireBaseManager {
       return "Success";
     }
     return "Something wrong";
+  }
+
+  static Future<String?> signInWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken);
+      await _auth.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
   }
 }
