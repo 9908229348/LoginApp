@@ -57,48 +57,21 @@ class BaseHomeViewState extends State<BaseHomeView> {
     _scrollController.dispose();
   }
 
-  // void searchNotes(String enteredWord) {
-  //   List<Note> results = [];
-  //   print("77777777777777777777777777");
-  //   print(enteredWord);
-  //   if (enteredWord.isEmpty) {
-  //     print("888888888888888");
-  //     results = noteList;
-  //   } else {
-  //     results = noteList
-  //         .where((note) =>
-  //             note.title.toLowerCase().contains(enteredWord.toLowerCase()))
-  //         .toList();
-  //     print("result isssssssssss ${results.toString()}");
-  //   }
-
-  //   setState(() {
-  //     foundNotes = results;
-  //   });
-  // }
-
   void searchNotes(String enteredWord) {
     filteredNoteList.clear();
 
     isSearchMode = true;
-    print("77777777777777777777777777");
-    print(enteredWord);
     if (enteredWord.isEmpty) {
-      print("888888888888888");
       isSearchMode = false;
       setState(() {});
-      //filteredNoteList = noteList;
     } else {
       filteredNoteList = noteList
           .where((note) =>
               note.title.toLowerCase().contains(enteredWord.toLowerCase()))
           .toList();
-      print("result isssssssssss ${filteredNoteList.toString()}");
     }
 
-    setState(() {
-      //foundNotes = filteredNoteList;
-    });
+    setState(() {});
   }
 
   fetchNotes(String queryType) async {
@@ -122,28 +95,27 @@ class BaseHomeViewState extends State<BaseHomeView> {
 
   @override
   Widget build(BuildContext context) {
-    print(filteredNoteList.length);
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           splashColor: bgColor,
           elevation: 1.0,
           foregroundColor: Colors.white,
-          child: Icon(
+          child: const Icon(
             Icons.add,
             size: 40.0,
           ),
           backgroundColor: cardColor,
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddNote()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddNote()));
           },
         ),
         endDrawerEnableOpenDragGesture: true,
         key: _drawerKey,
-        drawer: SideMenu(),
+        drawer: const SideMenu(),
         backgroundColor: bgColor,
         appBar: appBar(context),
-        body: NotesGridView());
+        body: notesGridView());
   }
 
   PreferredSizeWidget appBar(BuildContext context) {
@@ -153,7 +125,7 @@ class BaseHomeViewState extends State<BaseHomeView> {
         searchNotes(value);
       }),
       leading: IconButton(
-        icon: Icon(Icons.menu),
+        icon: const Icon(Icons.menu),
         onPressed: () {
           _drawerKey.currentState!.openDrawer();
         },
@@ -175,23 +147,23 @@ class BaseHomeViewState extends State<BaseHomeView> {
               color: white.withOpacity(0.7)),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfilePage()));
+                MaterialPageRoute(builder: (context) => const ProfilePage()));
           },
         ),
       ],
     );
   }
 
-  Widget NotesGridView() {
+  Widget notesGridView() {
     return SafeArea(
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: (!isSearchMode && filteredNoteList.isEmpty)
                 ? StaggeredGridView.countBuilder(
                     shrinkWrap: true,
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     itemCount: isSearchMode
                         ? filteredNoteList.length
                         : noteList.length,
@@ -210,10 +182,10 @@ class BaseHomeViewState extends State<BaseHomeView> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      NoteView(docToEdit: note)));
+                                      NoteView(noteToEdit: note)));
                         },
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               border: Border.all(color: white.withOpacity(0.2)),
                               borderRadius: BorderRadius.circular(7)),
@@ -222,24 +194,24 @@ class BaseHomeViewState extends State<BaseHomeView> {
                             children: [
                               Text(
                                 note.title,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 note.description,
-                                style: TextStyle(color: white),
+                                style: const TextStyle(color: white),
                               )
                             ],
                           ),
                         ),
                       );
                     })
-                : Text(
+                : const Text(
                     "No Results",
                     style: TextStyle(color: white),
                   )),

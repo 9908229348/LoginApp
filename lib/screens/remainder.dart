@@ -24,7 +24,7 @@ class _RemainderPageState extends State<RemainderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("Set Remainder")),
+        title: const Center(child: Text("Set Remainder")),
         backgroundColor: bgColor,
       ),
       backgroundColor: bgColor,
@@ -33,45 +33,43 @@ class _RemainderPageState extends State<RemainderPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "DateTime",
               style: TextStyle(color: white, fontSize: 17),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => pickDateTime(context),
               child: Text(
                 getText(),
-                style: TextStyle(color: white, fontSize: 20),
+                style: const TextStyle(color: white, fontSize: 20),
               ),
               style: ElevatedButton.styleFrom(
                   // background
                   onPrimary: Colors.black,
-                  fixedSize: Size(200, 50) // foreground
+                  fixedSize: const Size(200, 50) // foreground
                   ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("Cancel", style: TextStyle(color: white)),
+                  child: const Text("Cancel", style: TextStyle(color: white)),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.red, fixedSize: Size(100, 30)),
+                      primary: Colors.red, fixedSize: const Size(100, 30)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 110,
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print("=============alarm=========");
                     if (dateTime != null) {
-                      print(widget.note.title);
                       widget.note.isRemainded = !widget.note.isRemainded;
                       setState(() {});
                       String result = FireBaseManager.remaindNote(
@@ -87,12 +85,11 @@ class _RemainderPageState extends State<RemainderPage> {
                       }
                       scheduleAlarm(dateTime!);
                     }
-
                     Navigator.pop(context);
                   },
-                  child: Text("Add", style: TextStyle(color: white)),
+                  child: const Text("Add", style: TextStyle(color: white)),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.green, fixedSize: Size(100, 30)),
+                      primary: Colors.green, fixedSize: const Size(100, 30)),
                 ),
               ],
             )
@@ -158,16 +155,9 @@ class _RemainderPageState extends State<RemainderPage> {
   }
 
   void scheduleAlarm(DateTime dateTime) {
-    var present = DateTime.now();
-    print(
-        "================present time $present==================================");
-    print(dateTime);
     var scheduledNotificationDateTime = dateTime;
-    print(
-        "--------------------inside schedule alarm----------------------------");
-    print(dateTime);
 
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
       "alarm_notif",
       "alarm_notif",
       channelDescription: "Channel for Alarm notification",
@@ -176,7 +166,7 @@ class _RemainderPageState extends State<RemainderPage> {
       largeIcon: DrawableResourceAndroidBitmap('codex_logo'),
     );
 
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+    var iOSPlatformChannelSpecifics = const IOSNotificationDetails(
         sound: 'a_long_cold_sting.wav',
         presentAlert: true,
         presentBadge: true,

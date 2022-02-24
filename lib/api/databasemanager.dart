@@ -21,9 +21,9 @@ class DatabaseManager {
   }
 
   Future _createDB(Database db, int version) async {
-    final idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
-    final textType = "TEXT NOT NULL";
-    final boolType = ' BOOLEAN NOT NULL';
+    const idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
+    const textType = "TEXT NOT NULL";
+    const boolType = ' BOOLEAN NOT NULL';
 
     await db.execute('''
       CREATE TABLE $tableNotes(
@@ -31,7 +31,7 @@ class DatabaseManager {
         ${NoteFields.title} $textType,
         ${NoteFields.description} $textType,
         ${NoteFields.isArchieve} $boolType,
-        ${NoteFields.time} $textType            // DateTime 
+        ${NoteFields.time} $textType           
       )
     ''');
   }
@@ -50,7 +50,6 @@ class DatabaseManager {
       where: '${NoteFields.id} = ?',
       whereArgs: [id],
     );
-
     if (maps.isNotEmpty) {
       return Note.fromJson(maps.first);
     } else {
@@ -60,12 +59,9 @@ class DatabaseManager {
 
   Future<List<Note>> readAllNotes() async {
     final db = await instance.database;
-    //final orderBy = '${NoteFields.time} ASC';
-
     final result = await db.query(
-      tableNotes, /* orderBy: orderBy*/
+      tableNotes,
     );
-
     return result.map((json) => Note.fromJson(json)).toList();
   }
 
@@ -79,12 +75,6 @@ class DatabaseManager {
     );
   }
 
-//   Future archNote(Note? note) async{
-//   final db = await instance.database;
-
-//  await db.update(tableNotes, {note!.isArchieve : !note.isArchieve ? 1 : 0}, where:  '${NoteFields.id} = ?' ,whereArgs: [note.id] );
-// }
-
   Future<int> delete(int id) async {
     final db = await instance.database;
     return await db
@@ -95,5 +85,4 @@ class DatabaseManager {
     final db = await instance.database;
     db.close();
   }
-
 }

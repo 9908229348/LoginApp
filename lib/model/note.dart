@@ -1,20 +1,20 @@
-final String tableNotes = "notes";
+const String tableNotes = "notes";
 
 class NoteFields{
 
   static final List<String> values = [
     id, title, description, time, isArchieve, isRemainded
   ];
-  static final String id = "_id";
-  static final String title = "title";
-  static final String description = "description";
-  static final String isArchieve = "isArchieve";
-  static final String time = "time";
-  static final String isRemainded = "isRemainded";
+  
+  static const String id = "_id";
+  static const String title = "title";
+  static const String description = "description";
+  static const String isArchieve = "isArchieve";
+  static const String time = "time";
+  static const String isRemainded = "isRemainded";
 }
 
 class Note{
-
   String? id;
   final String title;
   final String description;
@@ -33,6 +33,7 @@ class Note{
       createdTime: json[NoteFields.time].toDate()
 
   );
+
   Map<String, dynamic> toJson(){
     return{
       NoteFields.id: id,

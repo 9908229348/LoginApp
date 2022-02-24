@@ -18,19 +18,17 @@ class AuthMethods {
       required Uint8List file}) async {
     String res = "Some error occured";
     try {
-      if (file != null) {
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
-        String photoUrl =
-            await StorageMethods().uploadImageToStorage("profilePic", file);
-        await _firestore.collection("users").doc(cred.user!.uid).set({
-          "name": name,
-          "uid": cred.user!.uid,
-          "email": email,
-          "photoUrl": photoUrl
-        });
-        res = "success";
-      }
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      String photoUrl =
+          await StorageMethods().uploadImageToStorage("profilePic", file);
+      await _firestore.collection("users").doc(cred.user!.uid).set({
+        "name": name,
+        "uid": cred.user!.uid,
+        "email": email,
+        "photoUrl": photoUrl
+      });
+      res = "success";
     } catch (err) {
       res = err.toString();
     }
@@ -58,7 +56,6 @@ class AuthMethods {
   static Future<String> editUserDetails(
       String uid, String name, String email, Uint8List? file) async {
     var userId = _auth.currentUser?.uid;
-    print("++++++Uid++++++++ $uid");
     if (file != null) {
       String photoUrl =
           await StorageMethods().uploadImageToStorage("profilePic", file);
@@ -67,15 +64,13 @@ class AuthMethods {
           .doc(userId)
           .update({"name": name, "email": email, "photoUrl": photoUrl});
     } else {
-      print("---------------------------");
-      print("Inside Else $name $email");
       try {
         await _firestore.collection("users").doc(userId).update({
           "name": name,
           "email": email,
         });
       } catch (e) {
-        print(e.toString());
+        return e.toString();
       }
     }
     return "success";
@@ -116,7 +111,7 @@ class AuthMethods {
 
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => const HomeScreen(),
               ),
             );
           } else {
@@ -124,15 +119,14 @@ class AuthMethods {
 
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => const HomeScreen(),
               ),
             );
           }
         });
       }
-    } catch (PlatformException) {
-      print(PlatformException);
-      print("Sign in not successful !");
+    } catch (e) {
+      
     }
   }
 }

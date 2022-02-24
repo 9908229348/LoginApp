@@ -11,6 +11,7 @@ class RemainderNotes extends BaseHomeView {
 }
 
 class _RemainderNotesState extends BaseHomeViewState {
+  
   @override
   fetchNotes(String queryType) async {
     if (allLoaded) {

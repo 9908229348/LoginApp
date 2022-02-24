@@ -1,15 +1,12 @@
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dummy_pro/model/user.dart';
 import 'package:dummy_pro/resources/auth_methods.dart';
-import 'package:dummy_pro/screens/login.dart';
 import 'package:dummy_pro/utils/colors.dart';
 import 'package:dummy_pro/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -28,6 +25,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Uint8List? _image;
   String? _imageFromFirebase;
 
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,13 +45,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       emailController = TextEditingController(text: loggedInUser.email);
       _imageFromFirebase = loggedInUser.photoUrl;
       setState(() {});
-    });
-  }
-
-  void selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    setState(() {
-      _image = im;
     });
   }
 
@@ -69,24 +66,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 }
               },
               splashRadius: 17,
-              icon: Icon(Icons.save_outlined),
+              icon: const Icon(Icons.save_outlined),
             )
           ],
         ),
         body: Stack(children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [Colors.lightBlueAccent, Colors.white24])),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Center(
@@ -100,7 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             radius: 64,
                             backgroundImage: _imageFromFirebase != null
                                 ? NetworkImage(_imageFromFirebase!)
-                                : NetworkImage(
+                                : const NetworkImage(
                                     "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"),
                           ),
                     Positioned(
@@ -108,38 +105,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         left: 80,
                         child: IconButton(
                           onPressed: selectImage,
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.add_a_photo,
                             color: Colors.lightBlueAccent,
                           ),
                         ))
                   ]),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "name",
                   style: TextStyle(fontSize: 20),
                 ),
                 TextField(
                   controller: nameController,
                   cursorColor: white,
-                  style: TextStyle(fontSize: 25, color: Colors.blue),
-                  decoration: InputDecoration(hintText: "name"),
+                  style: const TextStyle(fontSize: 25, color: Colors.blue),
+                  decoration: const InputDecoration(hintText: "name"),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   "email",
                   style: TextStyle(fontSize: 20),
                 ),
                 TextField(
                   controller: emailController,
                   cursorColor: white,
-                  style: TextStyle(fontSize: 25, color: Colors.blue),
-                  decoration: InputDecoration(hintText: "email"),
+                  style: const TextStyle(fontSize: 25, color: Colors.blue),
+                  decoration: const InputDecoration(hintText: "email"),
                 ),
               ],
             ),

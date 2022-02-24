@@ -5,7 +5,6 @@ import 'package:dummy_pro/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'edit_profile.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -48,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
         body: SafeArea(
           child: Stack(children: <Widget>[
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
@@ -56,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 80,
                 ),
                 Center(
@@ -64,33 +63,33 @@ class _ProfilePageState extends State<ProfilePage> {
                       radius: 64,
                       backgroundImage: _image != null
                           ? NetworkImage(_image!)
-                          : NetworkImage(
+                          : const NetworkImage(
                               "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
                   name ?? "Name",
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 30,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
                   email ?? "Email",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  style: const TextStyle(color: Colors.black, fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Edit Details",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
@@ -100,9 +99,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditProfilePage()));
+                                  builder: (context) => const EditProfilePage()));
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_forward_rounded,
                           color: Colors.blue,
                         )),
@@ -111,13 +110,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                Text("LogOut",style: TextStyle(color: Colors.black, fontSize: 20)),
-                IconButton(
-                    onPressed: () {
-                      logOut(context);
-                    },
-                    icon: Icon(Icons.logout))
-                    ],)
+                    const Text("LogOut",
+                        style: TextStyle(color: Colors.black, fontSize: 20)),
+                    IconButton(
+                        onPressed: () {
+                          logOut(context);
+                        },
+                        icon: const Icon(Icons.logout))
+                  ],
+                )
               ],
             )
           ]),
@@ -128,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
     await AuthMethods().signOut();
     SharedPreferences sharedPreference = await SharedPreferences.getInstance();
     sharedPreference.setBool("isLoggedIn", false);
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const Login()));
   }
 }

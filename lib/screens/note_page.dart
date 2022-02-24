@@ -6,8 +6,9 @@ import 'package:dummy_pro/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class NoteView extends StatefulWidget {
-  Note docToEdit;
-  NoteView({required this.docToEdit});
+  Note noteToEdit;
+
+  NoteView({Key? key, required this.noteToEdit}) : super(key: key);
 
   @override
   _NoteViewState createState() => _NoteViewState();
@@ -19,9 +20,9 @@ class _NoteViewState extends State<NoteView> {
 
   @override
   void initState() {
-    titleController = TextEditingController(text: widget.docToEdit.title);
+    titleController = TextEditingController(text: widget.noteToEdit.title);
     descriptionController =
-        TextEditingController(text: widget.docToEdit.description);
+        TextEditingController(text: widget.noteToEdit.description);
     super.initState();
   }
 
@@ -35,7 +36,7 @@ class _NoteViewState extends State<NoteView> {
         actions: [
           IconButton(
               onPressed: () {
-                String result = FireBaseManager.delete(widget.docToEdit);
+                String result = FireBaseManager.delete(widget.noteToEdit);
                 if (result == "success") {
                   showSnackBar(context, "deleted successfully");
                   Navigator.pop(context);
@@ -45,57 +46,65 @@ class _NoteViewState extends State<NoteView> {
                 }
               },
               splashRadius: 17,
-              icon: Icon(Icons.delete_outline)),
+              icon: const Icon(Icons.delete_outline)),
           IconButton(
               onPressed: () async {
                 await FireBaseManager.editNote(Note(
-                    id: widget.docToEdit.id,
+                    id: widget.noteToEdit.id,
                     title: titleController.text,
                     description: descriptionController.text,
-                    isArchieve: widget.docToEdit.isArchieve,
-                    createdTime: widget.docToEdit.createdTime));
+                    isArchieve: widget.noteToEdit.isArchieve,
+                    createdTime: widget.noteToEdit.createdTime));
                 Navigator.pop(context);
               },
               splashRadius: 17,
-              icon: Icon(Icons.save_outlined)),
+              icon: const Icon(Icons.save_outlined)),
           IconButton(
               onPressed: () {
-                widget.docToEdit.isArchieve = !widget.docToEdit.isArchieve;
-                setState(() {
-                });
-                String result = FireBaseManager.archieveNote(widget.docToEdit.id, widget.docToEdit.isArchieve);
-                if(result == 'Success'){
-                  showSnackBar(context, widget.docToEdit.isArchieve ? "Note is Archieved successfully" : "Note is Unarchieved Successfully");
-                }else{
+                widget.noteToEdit.isArchieve = !widget.noteToEdit.isArchieve;
+                setState(() {});
+                String result = FireBaseManager.archieveNote(
+                    widget.noteToEdit.id, widget.noteToEdit.isArchieve);
+                if (result == 'Success') {
+                  showSnackBar(
+                      context,
+                      widget.noteToEdit.isArchieve
+                          ? "Note is Archieved successfully"
+                          : "Note is Unarchieved Successfully");
+                } else {
                   showSnackBar(context, "Something went wrong");
                 }
               },
-              icon: Icon(widget.docToEdit.isArchieve
+              icon: Icon(widget.noteToEdit.isArchieve
                   ? Icons.archive_rounded
                   : Icons.archive_outlined)),
-
           IconButton(
             splashRadius: 17,
-            icon: Icon(Icons.alarm_add),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => RemainderPage(note: widget.docToEdit,)));
-            },    
-              )
+            icon: const Icon(Icons.alarm_add),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RemainderPage(
+                            note: widget.noteToEdit,
+                          )));
+            },
+          )
         ],
       ),
       body: Container(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
                 controller: titleController,
                 cursorColor: white,
-                style: TextStyle(color: white),
-                decoration: InputDecoration(
+                style: const TextStyle(color: white),
+                decoration: const InputDecoration(
                     hintText: 'Title', border: InputBorder.none),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
@@ -103,9 +112,9 @@ class _NoteViewState extends State<NoteView> {
                   controller: descriptionController,
                   cursorColor: white,
                   maxLines: null,
-                  style: TextStyle(color: white),
+                  style: const TextStyle(color: white),
                   expands: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: 'Content', border: InputBorder.none),
                 ),
               )

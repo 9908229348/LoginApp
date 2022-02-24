@@ -17,7 +17,7 @@ class _ForgetPassWordState extends State<ForgetPassWord> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               TextField(
@@ -26,21 +26,20 @@ class _ForgetPassWordState extends State<ForgetPassWord> {
               TextButton(
                   onPressed: () async {
                     try {
-                      print("=========================================================================");
                       await FirebaseAuth.instance.sendPasswordResetEmail(
                           email: userEmailController.text);
                       showSnackBar(context, "Email sent");
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'weak-password') {
-                        print("Password weak");
+                        showSnackBar(context, e.code);
                       } else if (e.code == 'email-already-in-use') {
-                        print('Email is already in use');
+                        showSnackBar(context, 'Email is already in use');
                       }
                     } catch (e) {
-                      print('inside $e');
+                      showSnackBar(context, e.toString());
                     }
                   },
-                  child: Text("Send Email"))
+                  child: const Text("Send Email"))
             ],
           ),
         ),

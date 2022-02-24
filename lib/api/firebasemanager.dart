@@ -10,7 +10,6 @@ class FireBaseManager {
   static Future<List<Note>> fetchNotes(String queryType) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uid = _auth.currentUser?.uid;
-
     Query<Map<String, dynamic>> ref;
 
     switch (queryType) {
@@ -33,10 +32,7 @@ class FireBaseManager {
               .orderBy("time")
               .startAfterDocument(lastDoc!)
               .limit(10);
-          print("----------inside more fetch----------");
         } else {
-          print(
-              "----------------------inside else of fetch----------------------------");
           ref = _fireStore
               .collection("users")
               .doc(uid)
@@ -58,7 +54,6 @@ class FireBaseManager {
   static Future<List<Note>> fetchArchieveNotes(String queryType) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uid = _auth.currentUser?.uid;
-
     Query<Map<String, dynamic>> ref;
 
     switch (queryType) {
@@ -81,10 +76,7 @@ class FireBaseManager {
               .orderBy("time")
               .startAfterDocument(lastDoc!)
               .limit(10);
-          print("----------inside more fetch----------");
         } else {
-          print(
-              "----------------------inside else of fetch----------------------------");
           ref = _fireStore
               .collection("users")
               .doc(uid)
@@ -94,7 +86,6 @@ class FireBaseManager {
               .limit(10);
         }
     }
-
     QuerySnapshot snapShot = await ref.get();
     final allData = snapShot.docs
         .map((doc) => Note.fromJson(doc.data() as Map<String, dynamic>))
@@ -129,10 +120,7 @@ class FireBaseManager {
               .orderBy("time")
               .startAfterDocument(lastDoc!)
               .limit(10);
-          print("----------inside more fetch----------");
         } else {
-          print(
-              "----------------------inside else of fetch----------------------------");
           ref = _fireStore
               .collection("users")
               .doc(uid)
@@ -142,12 +130,10 @@ class FireBaseManager {
               .limit(10);
         }
     }
-
     QuerySnapshot snapShot = await ref.get();
     final allData = snapShot.docs
         .map((doc) => Note.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
-    print("============================$allData=========================");
     lastDoc = snapShot.docs.last;
     return allData;
   }
@@ -159,10 +145,7 @@ class FireBaseManager {
         _fireStore.collection("users").doc(uid).collection("notes").doc();
     note.id = documentReference.id;
     documentReference.set(note.toJson());
-    if (documentReference != null) {
-      return "success";
-    }
-    return "something went wrong";
+    return "success";
   }
 
   static Future<String> editNote(Note note) async {
@@ -174,10 +157,7 @@ class FireBaseManager {
         .collection("notes")
         .doc(note.id);
     reference.update({'title': note.title, 'description': note.description});
-    if (reference != null) {
-      return "Success";
-    }
-    return "Something wrong";
+    return "Success";
   }
 
   static String delete(Note note) {
@@ -189,11 +169,7 @@ class FireBaseManager {
         .collection("notes")
         .doc(note.id);
     reference.delete();
-    if (reference != null) {
-      reference.delete();
       return "success";
-    }
-    return "something went wrong";
   }
 
   static String archieveNote(String? noteId, bool isArchieve) {
@@ -202,10 +178,7 @@ class FireBaseManager {
     DocumentReference reference =
         _fireStore.collection("users").doc(uid).collection("notes").doc(noteId);
     reference.update({'isArchieve': isArchieve});
-    if (reference != null) {
       return "Success";
-    }
-    return "Something wrong";
   }
 
   static String remaindNote(String? noteId, bool isRemainded) {
@@ -214,10 +187,7 @@ class FireBaseManager {
     DocumentReference reference =
         _fireStore.collection("users").doc(uid).collection("notes").doc(noteId);
     reference.update({'isRemainded': isRemainded});
-    if (reference != null) {
       return "Success";
-    }
-    return "Something wrong";
   }
 
   static Future<String?> signInWithGoogle() async {
@@ -233,7 +203,8 @@ class FireBaseManager {
           idToken: googleSignInAuthentication.idToken);
       await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      return e.message;
     }
+    return "success";
   }
 }

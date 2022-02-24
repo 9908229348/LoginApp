@@ -17,13 +17,13 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        decoration: BoxDecoration(color: bgColor),
+        decoration: const BoxDecoration(color: bgColor),
         child: SafeArea(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
-                margin: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
-                child: Text(
+                margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+                child: const Text(
                   "Google Keep",
                   style: TextStyle(
                       color: white, fontSize: 20, fontWeight: FontWeight.bold),
@@ -36,10 +36,10 @@ class _SideMenuState extends State<SideMenu> {
               text: "Notes",
               callBack: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                    MaterialPageRoute(builder: (context) => const HomeScreen()));
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             TextButtonWidget(
@@ -47,9 +47,9 @@ class _SideMenuState extends State<SideMenu> {
                 text: "Archieve",
                 callBack: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ArchieveNotes()));
+                      MaterialPageRoute(builder: (context) => const ArchieveNotes()));
                 }),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             TextButtonWidget(
@@ -59,7 +59,7 @@ class _SideMenuState extends State<SideMenu> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RemainderNotes()));
+                          builder: (context) => const RemainderNotes()));
                 })
           ]),
         ),

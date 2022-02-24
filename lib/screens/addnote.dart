@@ -3,9 +3,10 @@ import 'package:dummy_pro/model/note.dart';
 import 'package:dummy_pro/utils/colors.dart';
 import 'package:dummy_pro/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 class AddNote extends StatefulWidget {
+  const AddNote({Key? key}) : super(key: key);
+
   @override
   _AddNoteState createState() => _AddNoteState();
 }
@@ -38,17 +39,17 @@ class _AddNoteState extends State<AddNote> {
                 }
               },
               splashRadius: 17,
-              icon: Icon(Icons.save_outlined)),
+              icon: const Icon(Icons.save_outlined)),
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
             TextField(
                 controller: titleEditingController,
                 cursorColor: white,
-                style: TextStyle(fontSize: 25, color: Colors.white),
+                style: const TextStyle(fontSize: 25, color: Colors.white),
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -58,7 +59,7 @@ class _AddNoteState extends State<AddNote> {
                     hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey.withOpacity(0.8)))),
-            Container(
+            SizedBox(
                 height: 190,
                 child: TextField(
                   controller: descriptionEditingController,
@@ -66,7 +67,7 @@ class _AddNoteState extends State<AddNote> {
                   keyboardType: TextInputType.multiline,
                   minLines: 50,
                   maxLines: null,
-                  style: TextStyle(fontSize: 17, color: Colors.white),
+                  style: const TextStyle(fontSize: 17, color: Colors.white),
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
